@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: wind_forecast_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - ELEXON_BASE_URL=https://data.elexon.co.uk/bmrs/api/v1
+      - ELEXON_REQUEST_TIMEOUT=45.0
+      - ENABLE_CACHE=true
+      - CACHE_TTL_SECONDS=86400
+    volumes:
+      - backend_cache:/app/data_cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: wind_forecast_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  backend_cache:
+    driver: local
