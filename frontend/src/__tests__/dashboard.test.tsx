@@ -1,11 +1,10 @@
-import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MetricCards } from '../components/MetricCards';
 import { StatusBanner } from '../components/StatusBanner';
 import { ControlBar } from '../components/ControlBar';
 import { DataTable } from '../components/DataTable';
-import type { AccuracyMetrics, ForecastObservation, DashboardResponse } from '../types';
+import type { AccuracyMetrics, ForecastObservation } from '../types';
 
 describe('Dashboard Component Tests', () => {
   it('renders summary accuracy metrics correctly in MetricCards', () => {
