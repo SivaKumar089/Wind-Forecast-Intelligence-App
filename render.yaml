@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: wind-forecast-intelligence-app
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /api/health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: ELEXON_BASE_URL
+        value: https://data.elexon.co.uk/bmrs/api/v1
+      - key: ELEXON_REQUEST_TIMEOUT
+        value: "45.0"
+      - key: ENABLE_CACHE
+        value: "true"
+      - key: CACHE_TTL_SECONDS
+        value: "86400"
